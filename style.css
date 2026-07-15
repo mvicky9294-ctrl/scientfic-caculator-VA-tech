@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    /* Ultra-elegant, luxury dark radial gradient */
+    background: radial-gradient(circle, #1a1a1a 0%, #070707 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.calculator-container {
+    background-color: #000000;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a; 
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.7), 0px 0px 20px rgba(255, 0, 0, 0.03);
+    width: 380px;
+}
+
+.brand {
+    color: #ffffff; 
+    font-size: 15px;
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 18px;
+    font-weight: 900; /* Ultra-bold */
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.2);
+}
+
+/* Bigger Display Screen Box */
+.display-box {
+    width: 100%;
+    height: 120px;
+    background-color: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Top line: Your typed expression */
+#expression-display {
+    color: #ffffff; 
+    font-size: 24px;   
+    font-weight: bold; 
+    min-height: 28px;
+    letter-spacing: 1px;
+}
+
+/* Bottom line: Real-time dynamic response */
+#live-preview {
+    color: #ff3333; 
+    font-size: 34px;
+    font-weight: 900; 
+    text-shadow: 0px 0px 10px rgba(255, 51, 51, 0.2); 
+}
+
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.btn {
+    height: 55px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #161616; 
+    color: #ffffff;
+    transition: background 0.15s, transform 0.05s;
+}
+
+.btn:hover {
+    background-color: #262626;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn.sci {
+    background-color: #0d1520;
+    color: #7da7e8;
+}
+
+.btn.sci:hover {
+    background-color: #162436;
+}
+
+.btn.operator {
+    background-color: #222222;
+    color: #ffffff;
+}
+
+.btn.operator:hover {
+    background-color: #333333;
+}
+
+.btn.clear {
+    background-color: #2b1111;
+    color: #ff5555;
+}
+
+.btn.clear:hover {
+    background-color: #441a1a;
+}
+
+.btn.equal {
+    background-color: #cc1111;
+    color: #ffffff;
+}
+
+.btn.equal:hover {
+    background-color: #ee2222;
+}
