@@ -1,156 +1,163 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+let currentInput = "";
+let memoryValue = 0;
+let is2ndMode = false;
+
+let tvmState = { N: null, IY: null, PV: null, PMT: null, FV: null };
+let cashFlows = [];
+
+const expressionDisplay = document.getElementById("expression-display");
+const livePreview = document.getElementById("live-preview");
+const indicatorDisplay = document.getElementById("indicator-display");
+
+function updateIndicators(statusText = "") {
+    if (statusText) {
+        indicatorDisplay.innerText = statusText;
+        indicatorDisplay.style.color = "#1f618d";
+    } else if (is2ndMode) {
+        indicatorDisplay.innerText = "2nd DEG";
+        indicatorDisplay.style.color = "#a83232";
+    } else {
+        indicatorDisplay.innerText = "DEG";
+        indicatorDisplay.style.color = "rgba(0,0,0,0.4)";
+    }
 }
 
-body {
-    background-color: #1e252b;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+function pressNum(num) {
+    if (currentInput === "0" && num !== ".") {
+        currentInput = num;
+    } else {
+        currentInput += num;
+    }
+    livePreview.innerText = currentInput;
 }
 
-.calculator-container {
-    background-color: #14181b;
-    width: 100%;
-    max-width: 420px;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    border: 2px solid #2c353d;
+function pressOp(op) {
+    if (currentInput === "" && op === "-") {
+        currentInput = "-";
+        livePreview.innerText = currentInput;
+        return;
+    }
+    currentInput += " " + op + " ";
+    expressionDisplay.innerText = currentInput;
 }
 
-.brand {
-    color: #e0e0e0;
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-align: center;
-    margin-bottom: 5px;
+function press2nd() {
+    is2ndMode = !is2ndMode;
+    updateIndicators();
 }
 
-.sub-brand {
-    display: block;
-    color: #ff4747;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 3px;
-    margin-top: 2px;
+function compute() {
+    updateIndicators("COMPUTE");
 }
 
-.display-box {
-    background-color: #b0c2b2;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 25px;
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
-    border: 3px solid #7a8c7c;
+function pressKey(action) {
+    if (action === 'ENTER') {
+        updateIndicators("ENTERED");
+    }
 }
 
-.indicators {
-    font-size: 0.75rem;
-    color: rgba(0, 0, 0, 0.4);
-    font-weight: bold;
-    letter-spacing: 1px;
-    width: 100%;
-    text-align: left;
+function clearAll() {
+    currentInput = "";
+    expressionDisplay.innerText = "";
+    livePreview.innerText = "0";
+    is2ndMode = false;
+    updateIndicators();
 }
 
-#expression-display {
-    font-size: 1.1rem;
-    color: #2b332c;
-    min-height: 20px;
-    word-wrap: break-word;
-    word-break: break-all;
-    width: 100%;
-    text-align: right;
+function backspace() {
+    if (currentInput.length > 0) {
+        currentInput = currentInput.trimEnd();
+        currentInput = currentInput.substring(0, currentInput.length - 1);
+        livePreview.innerText = currentInput === "" || currentInput === "-" ? "0" : currentInput;
+    }
 }
 
-#live-preview {
-    font-size: 2.2rem;
-    color: #1b201c;
-    font-weight: 700;
-    font-family: monospace;
+function toggleSign() {
+    if (currentInput !== "" && currentInput !== "0") {
+        if (currentInput.startsWith("-")) {
+            currentInput = currentInput.substring(1);
+        } else {
+            currentInput = "-" + currentInput;
+        }
+        livePreview.innerText = currentInput;
+    }
 }
 
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+function pressMath(type) {
+    let val = parseFloat(livePreview.innerText);
+    if (isNaN(val)) return;
+
+    let result = 0;
+    switch (type) {
+        case 'sqrt': result = Math.sqrt(val); break;
+        case 'sq':   result = Math.pow(val, 2); break;
+        case 'inv':  result = 1 / val; break;
+        case 'ln':   result = Math.log(val); break;
+        case 'y_to_x': 
+            currentInput += " ^ "; 
+            expressionDisplay.innerText = currentInput; 
+            return;
+    }
+    currentInput = result.toString();
+    livePreview.innerText = currentInput;
 }
 
-.btn {
-    border: none;
-    outline: none;
-    padding: 15px 5px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.1s ease;
-    box-shadow: 0 3px 0 #0d1012;
-    color: #ffffff;
+function evaluateExpression(expr) {
+    let cleanExpr = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/\^/g, '**');
+    try {
+        if (/^[0-9.+\-*/%()\s]*$/.test(cleanExpr.replace(/[^0-9.+\-*/%()\s]/g, ''))) {
+            return Function(`"use strict"; return (${cleanExpr})`)();
+        }
+        return "Error";
+    } catch (err) {
+        return "Error";
+    }
 }
 
-.btn:active {
-    transform: translateY(3px);
-    box-shadow: none;
+function calculateResult() {
+    if (currentInput === "") return;
+    let result = evaluateExpression(currentInput);
+    if (result === "Error" || isNaN(result)) {
+        livePreview.innerText = "Error";
+    } else {
+        livePreview.innerText = Number(result.toFixed(6));
+        currentInput = result.toString();
+    }
+    expressionDisplay.innerText = "";
 }
 
-.functional {
-    background-color: #38434e;
+function storeMemory() {
+    memoryValue = parseFloat(livePreview.innerText) || 0;
+    clearAll();
+    updateIndicators("STORED");
 }
-.functional:hover { background-color: #44515e; }
 
-.control {
-    background-color: #a83232;
+function recallMemory() {
+    currentInput += memoryValue.toString();
+    livePreview.innerText = currentInput;
 }
-.control:hover { background-color: #c43b3b; }
 
-.finance {
-    background-color: #273746;
-    border: 1px solid #ffaa44;
+function setTVM(key) {
+    let val = parseFloat(livePreview.innerText) || 0;
+    tvmState[key] = val;
+    expressionDisplay.innerText = `${key} set to:`;
+    livePreview.innerText = val;
+    currentInput = "";
 }
-.finance:hover { background-color: #34495e; }
 
-.tvm {
-    background-color: #566573;
-    color: #ffcc00;
+function setCashFlow() {
+    let val = parseFloat(livePreview.innerText) || 0;
+    cashFlows.push(val);
+    expressionDisplay.innerText = `CF Entries: ${cashFlows.length}`;
+    currentInput = "";
 }
-.tvm:hover { background-color: #6c7a89; }
 
-.math {
-    background-color: #2c3e50;
+function calculateNPV() {
+    expressionDisplay.innerText = "NPV Result";
+    livePreview.innerText = "0.00"; 
 }
-.math:hover { background-color: #34495e; }
 
-.number {
-    background-color: #efefef;
-    color: #14181b;
-    box-shadow: 0 3px 0 #bdc3c7;
-}
-.number:hover { background-color: #ffffff; }
-
-.operator {
-    background-color: #d68910;
-}
-.operator:hover { background-color: #eb984e; }
-
-.equals {
-    background-color: #1f618d;
-}
-.equals:hover { background-color: #2980b9; }
-
-@media (max-width: 400px) {
-    .button-grid { gap: 8px; }
-    .btn { padding: 12px 2px; font-size: 0.85rem; }
+function calculateIRR() {
+    expressionDisplay.innerText = "IRR Result";
+    livePreview.innerText = "0.00%";
 }
