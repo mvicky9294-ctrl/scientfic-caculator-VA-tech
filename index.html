@@ -3,64 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator V.A Tech</title>
-    <meta name="description" content="Use the sleek VA Tech Scientific Calculator online. Calculate advanced trigonometry, logs, and equations quickly.">
-<meta name="keywords" content="VA Tech, scientific calculator, online calculator, web calculator, V.A Tech">
-<meta name="author" content="Vignesh.M">
+    <title>Advanced Financial Calculator | V.A Tech Professional</title>
+    <!-- Search Engine Optimization Tags -->
+    <meta name="description" content="Professional web version of the BA-II Plus Financial Calculator. Compute TVM, NPV, IRR, Amortization, and more.">
+    <meta name="keywords" content="VA Tech, scientific calculator, online calculator, web calculator, accounting calculator, NPV IRR calculator, V.A Tech">
+    <meta name="author" content="Vignesh.M">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="calculator-container">
         <!-- Brand Signature -->
-        <div class="brand">V.A TECH</div>
+        <div class="brand">V.A TECH <span class="sub-brand">PRO BUSINESS ANALYST</span></div>
         
-        <!-- Large Dual Display Screen -->
+        <!-- Digital Screen Display -->
         <div class="display-box">
+            <div id="indicator-display" class="indicators">DEG</div>
             <div id="expression-display"></div>
             <div id="live-preview">0</div>
         </div>
 
-        <!-- Calculator Buttons -->
-        <div class="buttons-grid">
-            <!-- Row 1: Scientific Functions -->
-            <button class="btn sci" onclick="press('sin(')">sin</button>
-            <button class="btn sci" onclick="press('cos(')">cos</button>
-            <button class="btn sci" onclick="press('tan(')">tan</button>
-            <button class="btn sci" onclick="press('Math.sqrt(')">√</button>
+        <!-- Calculator Keyboard Layout Grid -->
+        <div class="button-grid">
             
-            <!-- Row 2: Advanced Math -->
-            <button class="btn sci" onclick="press('Math.PI')">π</button>
-            <button class="btn sci" onclick="press('Math.log10(')">log</button>
-            <button class="btn sci" onclick="press('**2')">x²</button>
-            <button class="btn clear" onclick="clearDisplay()">C</button>
+            <!-- Row 1: System Controls -->
+            <button class="btn functional" onclick="press2nd()">2ND</button>
+            <button class="btn functional" onclick="compute()">CPT</button>
+            <button class="btn functional" onclick="pressKey('ENTER')">ENTER</button>
+            <button class="btn functional" onclick="backspace()">DEL</button>
+            <button class="btn control clear" onclick="clearAll()">CE/C</button>
 
-            <!-- Row 3: White Numbers & Basic Operators -->
-            <button class="btn" onclick="press('7')">7</button>
-            <button class="btn" onclick="press('8')">8</button>
-            <button class="btn" onclick="press('9')">9</button>
-            <button class="btn operator" onclick="press('/')">÷</button>
+            <!-- Row 2: Finance Functions -->
+            <button class="btn finance" onclick="setCashFlow()">CF</button>
+            <button class="btn finance" onclick="calculateNPV()">NPV</button>
+            <button class="btn finance" onclick="calculateIRR()">IRR</button>
+            <button class="btn functional" onclick="storeMemory()">STO</button>
+            <button class="btn functional" onclick="recallMemory()">RCL</button>
 
-            <!-- Row 4 -->
-            <button class="btn" onclick="press('4')">4</button>
-            <button class="btn" onclick="press('5')">5</button>
-            <button class="btn" onclick="press('6')">6</button>
-            <button class="btn operator" onclick="press('*')">×</button>
+            <!-- Row 3: Time Value of Money (TVM) Keys -->
+            <button class="btn tvm" onclick="setTVM('N')">N</button>
+            <button class="btn tvm" onclick="setTVM('IY')">I/Y</button>
+            <button class="btn tvm" onclick="setTVM('PV')">PV</button>
+            <button class="btn tvm" onclick="setTVM('PMT')">PMT</button>
+            <button class="btn tvm" onclick="setTVM('FV')">FV</button>
 
-            <!-- Row 5 -->
-            <button class="btn" onclick="press('1')">1</button>
-            <button class="btn" onclick="press('2')">2</button>
-            <button class="btn" onclick="press('3')">3</button>
-            <button class="btn operator" onclick="press('-')">−</button>
+            <!-- Row 4: Math Operations -->
+            <button class="btn math" onclick="pressNum('%')">%</button>
+            <button class="btn math" onclick="pressMath('sqrt')">√x</button>
+            <button class="btn math" onclick="pressMath('sq')">x²</button>
+            <button class="btn math" onclick="pressMath('inv')">1/x</button>
+            <button class="btn operator" onclick="pressOp('/')">÷</button>
 
-            <!-- Row 6 -->
-            <button class="btn" onclick="press('0')">0</button>
-            <button class="btn" onclick="press('.')">.</button>
-            <button class="btn equal" onclick="calculate()">=</button>
-            <button class="btn operator" onclick="press('+')">+</button>
-            
-            <!-- Helper closing parenthesis row for scientific formulas -->
-            <button class="btn sci" style="grid-column: span 4; height: 40px; font-size: 14px;" onclick="press(')')">close parenthesis ( ) )</button>
+            <!-- Row 5: Numbers & Multiplication -->
+            <button class="btn math" onclick="pressMath('ln')">LN</button>
+            <button class="btn number" onclick="pressNum('7')">7</button>
+            <button class="btn number" onclick="pressNum('8')">8</button>
+            <button class="btn number" onclick="pressNum('9')">9</button>
+            <button class="btn operator" onclick="pressOp('*')">×</button>
+
+            <!-- Row 6: Numbers & Subtraction -->
+            <button class="btn math" onclick="pressMath('y_to_x')">yⁿ</button>
+            <button class="btn number" onclick="pressNum('4')">4</button>
+            <button class="btn number" onclick="pressNum('5')">5</button>
+            <button class="btn number" onclick="pressNum('6')">6</button>
+            <button class="btn operator" onclick="pressOp('-')">-</button>
+
+            <!-- Row 7: Numbers & Addition -->
+            <button class="btn math" onclick="toggleSign()">+/-</button>
+            <button class="btn number" onclick="pressNum('1')">1</button>
+            <button class="btn number" onclick="pressNum('2')">2</button>
+            <button class="btn number" onclick="pressNum('3')">3</button>
+            <button class="btn operator" onclick="pressOp('+')">+</button>
+
+            <!-- Row 8: Parentheses, Zero, Decimal, and Equals -->
+            <button class="btn functional" onclick="pressNum('(')">(</button>
+            <button class="btn functional" onclick="pressNum(')')">)</button>
+            <button class="btn number" onclick="pressNum('0')">0</button>
+            <button class="btn number" onclick="pressNum('.')">.</button>
+            <button class="btn equals" onclick="calculateResult()">=</button>
+
         </div>
     </div>
 
